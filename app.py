@@ -6,7 +6,7 @@ st.markdown("""## User can ctreate or
 download AI created Resume based on high
 Score""")
 
-import IPython as ip
+
 import os
 import time
 import langchain
