@@ -32,6 +32,14 @@ GOOGLE_API_KEY = st.sidebar.text_input("GOOGLE_API_KEY",type="password")
 GROQ_API_KEY = st.sidebar.text_input("GROQ_API_KEY",type="password")
 TAVILY_API_KEY = st.sidebar.text_input("TAVILY_API_KEY",type="password")
 
+if not (GOOGLE_API_KEY) and not (GROQ_API_KEY) and not (TAVILY_API_KEY):
+    st,sidebar.warning("PASS API KEYS")
+    st.stop()
+else:
+    st.success("API KEYS LOADED")
+
+
+
 
 # ===============MODEL BUILDING=============
 model = ChatGoogleGenerativeAI(
@@ -97,6 +105,45 @@ def resume_maker_prompt():
   return prompt
 
 resume_maker_prompt()
+
+uploaded_file = st.sidebar.file_uploader(
+    "Choose an image file",
+    type=["jpg","jpg","png","webp"]
+)
+if uploaded_file is not None:
+    try:
+        image = Image.open(uploaded_file)
+
+        st.sidebar.image(image, caption="Uploaded Image", use_container_width=True)
+
+        if image.mode in ("RGBA","P"):
+            image = image.convert("RGB")
+        base_name = os.path.splitext(uploaded_file.name)[0]
+        save_path = f"{base_name}.jpg"
+
+        # 3 . Save the image to the current working directory
+        image.save(save_path,"JPEG")
+        st.sidebar.success(f"🎉 Image successfully saved as '{save_path}'!")
+
+    except Exception as e:
+        st.error(f"Error processing image:{e}")
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
 # ===========GENERATE RESUME========
 prompt = """You are a helpful AI assistant
 with job resume maker, your task is to give
@@ -106,6 +153,14 @@ User will upload data and return HTML format resume
 always use different color or styling"""
 
 final_prompt = prompt + resume_maker_prompt()
+
+user_info = st.text_input("ENTER YOUR INFORMATION")
+
+user_details = f"""user details: given below:
+Resume info: {user_info}
+photo: {uploaded_file}
+
+default if not given: Give Python Developer Resume"""
 
 user_details = """user details: given below:
 Give Python Developer Resume"""
