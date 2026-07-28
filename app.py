@@ -126,13 +126,8 @@ PROFILE = st.sidebar.multiselect("SELECT JOB ROLE",
                  options = JOB_PROFILE)
 
 if st.button('generate resume'):
-  with st.spinner("runnign agent"):
-  response = agent.invoke({'messages':[{'role':'user','content':job_prompt}]})
-
-
-    
-    print(response['messages'][-1].content)
-    code=response['messages'][-1].content[-1]['text']
+    with st.spinner("runnign agent"):
+        response = agent.invoke({'messages':[{'role':'user','content':job_prompt}]})
 
     # swap in the actual uploaded photo instead of the placeholder tag
     if FILE is not None:
@@ -140,14 +135,14 @@ if st.button('generate resume'):
             b64_image = base64.b64encode(img_file.read()).decode()
         data_uri = f"data:image/jpeg;base64,{b64_image}"
         code = code.replace("PROFILE_IMAGE_PLACEHOLDER", data_uri)
-
-    st.html(code , width="stretch" , unsafe_allow_javascript=True)
-
+    
+        st.html(code , width="stretch" , unsafe_allow_javascript=True)
+    
     st.divider()
     response = agent.invoke({'messages':[{'role':'user','content':job_prompt}]})
 
     job_code = response['messages'][-1].content[-1]['text']
     st.html(job_code , width="stretch" , unsafe_allow_javascript=True)
       
- 
+
     
