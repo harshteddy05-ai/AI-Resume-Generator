@@ -125,6 +125,13 @@ JOB_PROFILE = ["PYTHON DEVELOPER", 'GEN AI',
 PROFILE = st.sidebar.multiselect("SELECT JOB ROLE",
                  options = JOB_PROFILE)
 
+job_prompt = """Based on {PROFILE} jobs in {LOCATION}, I
+want latest job news in using tavily,
+try top 10 search or whatever available
+and give result like naukri theme design with 
+job name, job desc, salary,
+apply link"""
+
 if st.button('generate resume'):
     with st.spinner("runnign agent"):
         response = agent.invoke({'messages':[{'role':'user','content':job_prompt}]})
